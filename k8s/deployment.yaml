@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hd-repo
+  labels:
+    app: hd-repo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hd-repo
+  template:
+    metadata:
+      labels:
+        app: hd-repo
+    spec:
+      containers:
+        - name: hd-repo
+          image: noxzz/hd-repo:latest .
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
