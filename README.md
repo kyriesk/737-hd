@@ -117,6 +117,6 @@ Substitutions configured in `cloudbuild.yaml`:
 
 ## Time Management Plan
 
-- Day 1: create Flask app, Dockerfile, and Kubernetes manifests
+- 1: create Flask app, Dockerfile, and Kubernetes manifests
 - Day 2: configure GCP resources and validate deployment
 - Day 3: configure Cloud Build, test pipeline, and finalize documentation
