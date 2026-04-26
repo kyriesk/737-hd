@@ -120,9 +120,3 @@ Substitutions configured in `cloudbuild.yaml`:
 - Day 1: create Flask app, Dockerfile, and Kubernetes manifests (1-2 hours).
 - Day 2: configure GCP resources and validate deployment (1-2 hours).
 - Day 3: configure Cloud Build, test pipeline, and finalize documentation (1 hour).
-
-## Notes
-
-- Replace `YOUR_PROJECT_ID` with the Deakin GCP project ID.
-- If Artifact Registry is blocked, switch `cloudbuild.yaml` and manifests to use Docker Hub or GitHub Container Registry.
-- This implementation is intentionally simple and designed for a GCP-based cloud-native demo.
