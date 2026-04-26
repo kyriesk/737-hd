@@ -1,18 +1,30 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "docker.io/noxzz/hd-repo:${SHORT_SHA}", "."]
+    args:
+      [
+        "build",
+        "-t",
+        "${_ARTIFACT_REGISTRY_HOST}/${PROJECT_ID}/${_REPOSITORY}/hd-repo:${SHORT_SHA}",
+        ".",
+      ]
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "docker.io/noxzz/hd-repo:${SHORT_SHA}"]
+    args:
+      [
+        "push",
+        "${_ARTIFACT_REGISTRY_HOST}/${PROJECT_ID}/${_REPOSITORY}/hd-repo:${SHORT_SHA}",
+      ]
   - name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
       - "-c"
       - |
         gcloud container clusters get-credentials ${_CLUSTER_NAME} --zone ${_CLUSTER_ZONE} --project ${PROJECT_ID}
-        kubectl set image deployment/hd-repo hd-repo=docker.io/noxzz/hd-repo:${SHORT_SHA} --record
+        kubectl set image deployment/hd-repo hd-repo=${_ARTIFACT_REGISTRY_HOST}/${PROJECT_ID}/${_REPOSITORY}/hd-repo:${SHORT_SHA} --record
 images:
-  - "docker.io/noxzz/hd-repo:${SHORT_SHA}"
+  - "${_ARTIFACT_REGISTRY_HOST}/${PROJECT_ID}/${_REPOSITORY}/hd-repo:${SHORT_SHA}"
 substitutions:
+  _ARTIFACT_REGISTRY_HOST: "australia-southeast1-docker.pkg.dev"
+  _REPOSITORY: "hd-repo"
   _CLUSTER_NAME: "hd-gke-cluster"
   _CLUSTER_ZONE: "australia-southeast1-a"
 
