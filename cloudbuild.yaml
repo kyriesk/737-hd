@@ -5,15 +5,14 @@ steps:
       - "-c"
       - "echo '$_DOCKERHUB_TOKEN' | docker login -u 'noxzz' --password-stdin && docker build -t docker.io/noxzz/hd-repo:$SHORT_SHA . && docker push docker.io/noxzz/hd-repo:$SHORT_SHA"
 
-  - name: "gcr.io/cloud-builders/kubectl"
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: "bash"
     args:
       - "-c"
-      - "kubectl apply -f k8s/"
-    env:
-      - "CLOUDSDK_COMPUTE_ZONE=$_CLUSTER_ZONE"
-      - "CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME"
-      - "CLOUDSDK_CORE_PROJECT=$PROJECT_ID"
+      - |
+        gcloud container clusters get-credentials $_CLUSTER_NAME --zone $_CLUSTER_ZONE --project $PROJECT_ID
+        sed -i 's|IMAGE_TAG|$SHORT_SHA|g' k8s/deployment.yaml
+        kubectl apply -f k8s/
 
 images:
   - "docker.io/noxzz/hd-repo:$SHORT_SHA"
