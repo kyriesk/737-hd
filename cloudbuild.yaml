@@ -4,6 +4,7 @@ steps:
     args:
       - "-c"
       - |
+        echo "$$_DOCKERHUB_TOKEN" | docker login -u "noxzz" --password-stdin
         docker build -t docker.io/noxzz/hd-repo:${SHORT_SHA} .
         docker push docker.io/noxzz/hd-repo:${SHORT_SHA}
 
@@ -21,6 +22,7 @@ images:
 substitutions:
   _CLUSTER_NAME: "hd-gke-cluster"
   _CLUSTER_ZONE: "australia-southeast1-a"
+  _DOCKERHUB_TOKEN: "" # left blank here, set in the trigger
 
 options:
   logging: CLOUD_LOGGING_ONLY
