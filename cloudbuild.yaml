@@ -6,11 +6,10 @@ steps:
       - "echo '$_DOCKERHUB_TOKEN' | docker login -u 'noxzz' --password-stdin && docker build -t docker.io/noxzz/hd-repo:$SHORT_SHA . && docker push docker.io/noxzz/hd-repo:$SHORT_SHA"
 
   - name: "gcr.io/cloud-builders/kubectl"
+    entrypoint: "bash"
     args:
-      - "set"
-      - "image"
-      - "deployment/hd-repo"
-      - "hd-repo=docker.io/noxzz/hd-repo:$SHORT_SHA"
+      - "-c"
+      - "kubectl apply -f k8s/"
     env:
       - "CLOUDSDK_COMPUTE_ZONE=$_CLUSTER_ZONE"
       - "CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME"
