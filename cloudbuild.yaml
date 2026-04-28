@@ -4,7 +4,7 @@ steps:
     args:
       - "-c"
       - |
-        echo "$DOCKERHUB_PASSWORD" | docker login -u "${_DOCKERHUB_USERNAME}" --password-stdin
+        echo "$DOCKERHUB_PASSWORD" | docker login -u "noxzz" --password-stdin
         docker build -t docker.io/noxzz/hd-repo:${SHORT_SHA} .
         docker push docker.io/noxzz/hd-repo:${SHORT_SHA}
   - name: "gcr.io/cloud-builders/gcloud"
@@ -19,7 +19,6 @@ images:
 substitutions:
   _CLUSTER_NAME: "hd-gke-cluster"
   _CLUSTER_ZONE: "australia-southeast1-a"
-  _DOCKERHUB_USERNAME: "noxzz"
 availableSecrets:
   secretManager:
     - versionName: projects/${PROJECT_ID}/secrets/dockerhub-password/versions/latest
