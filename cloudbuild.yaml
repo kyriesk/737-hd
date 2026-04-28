@@ -3,26 +3,21 @@ steps:
     entrypoint: "bash"
     args:
       - "-c"
-      - |
-        echo "$$_DOCKERHUB_TOKEN" | docker login -u "noxzz" --password-stdin
-        docker build -t docker.io/noxzz/hd-repo:${SHORT_SHA} .
-        docker push docker.io/noxzz/hd-repo:${SHORT_SHA}
+      - "echo '$_DOCKERHUB_TOKEN' | docker login -u 'noxzz' --password-stdin && docker build -t docker.io/noxzz/hd-repo:$SHORT_SHA . && docker push docker.io/noxzz/hd-repo:$SHORT_SHA"
 
   - name: "gcr.io/cloud-builders/gcloud"
     entrypoint: "bash"
     args:
       - "-c"
-      - |
-        gcloud container clusters get-credentials ${_CLUSTER_NAME} --zone ${_CLUSTER_ZONE} --project ${PROJECT_ID}
-        kubectl set image deployment/hd-repo hd-repo=docker.io/noxzz/hd-repo:${SHORT_SHA}
+      - "gcloud container clusters get-credentials $_CLUSTER_NAME --zone $_CLUSTER_ZONE --project $PROJECT_ID && kubectl set image deployment/hd-repo hd-repo=docker.io/noxzz/hd-repo:$SHORT_SHA"
 
 images:
-  - "docker.io/noxzz/hd-repo:${SHORT_SHA}"
+  - "docker.io/noxzz/hd-repo:$SHORT_SHA"
 
 substitutions:
   _CLUSTER_NAME: "hd-gke-cluster"
   _CLUSTER_ZONE: "australia-southeast1-a"
-  _DOCKERHUB_TOKEN: "" # left blank here, set in the trigger
+  _DOCKERHUB_TOKEN: ""
 
 options:
   logging: CLOUD_LOGGING_ONLY
