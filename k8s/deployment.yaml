@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: hd-repo
-          image: noxzz/hd-repo:latest
+          image: docker.io/noxzz/hd-repo:IMAGE_TAG
           ports:
             - containerPort: 8080
           resources:
