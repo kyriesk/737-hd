@@ -5,11 +5,16 @@ steps:
       - "-c"
       - "echo '$_DOCKERHUB_TOKEN' | docker login -u 'noxzz' --password-stdin && docker build -t docker.io/noxzz/hd-repo:$SHORT_SHA . && docker push docker.io/noxzz/hd-repo:$SHORT_SHA"
 
-  - name: "gcr.io/cloud-builders/gcloud"
-    entrypoint: "bash"
+  - name: "gcr.io/cloud-builders/kubectl"
     args:
-      - "-c"
-      - "gcloud container clusters get-credentials $_CLUSTER_NAME --zone $_CLUSTER_ZONE --project $PROJECT_ID && kubectl set image deployment/hd-repo hd-repo=docker.io/noxzz/hd-repo:$SHORT_SHA"
+      - "set"
+      - "image"
+      - "deployment/hd-repo"
+      - "hd-repo=docker.io/noxzz/hd-repo:$SHORT_SHA"
+    env:
+      - "CLOUDSDK_COMPUTE_ZONE=$_CLUSTER_ZONE"
+      - "CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME"
+      - "CLOUDSDK_CORE_PROJECT=$PROJECT_ID"
 
 images:
   - "docker.io/noxzz/hd-repo:$SHORT_SHA"
